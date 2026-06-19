@@ -1,0 +1,1 @@
+export const formatCurrency = (amt) => 'KES ' + amt.toLocaleString();

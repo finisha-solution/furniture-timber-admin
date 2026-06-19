@@ -1,0 +1,22 @@
+{
+  "name": "furniture-timber-management",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "mobile-app",
+    "admin-dashboard",
+    "cloud-functions/functions"
+  ],
+  "scripts": {
+    "dev:mobile": "cd mobile-app && npm start",
+    "dev:admin": "cd admin-dashboard && npm run dev",
+    "dev:functions": "cd cloud-functions/functions && npm run serve",
+    "build:mobile": "cd mobile-app && npm run build",
+    "build:admin": "cd admin-dashboard && npm run build",
+    "build:functions": "cd cloud-functions/functions && npm run build",
+    "deploy": "bash scripts/deploy.sh"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.0"
+  }
+}

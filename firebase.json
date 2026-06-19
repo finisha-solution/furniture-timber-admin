@@ -1,0 +1,27 @@
+{
+  "firestore": {
+    "rules": "cloud-functions/firestore.rules",
+    "indexes": "cloud-functions/firestore.indexes.json"
+  },
+  "functions": {
+    "source": "cloud-functions/functions"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8081
+    },
+    "functions": {
+      "port": 5001
+    },
+    "storage": {
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    }
+  }
+}
