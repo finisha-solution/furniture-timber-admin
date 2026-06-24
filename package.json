@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "turbo": "^1.10.0"
+  },
+  "dependencies": {
+    "expo": "~49.0.0"
   }
 }

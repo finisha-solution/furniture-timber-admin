@@ -1,3 +1,4 @@
+import { sendExpenseApprovalRequest } from '../services/emailService';
 import * as functions from 'firebase-functions'; 
 import * as admin from 'firebase-admin'; 
 const db = admin.firestore(); 
@@ -11,5 +12,10 @@ export const onExpenditureCreated = functions.firestore.document('expenditures/{
     await monthRef.set({ 
         totalExpenses: admin.firestore.FieldValue.increment(exp.totalAmount), 
         byCategory: { [exp.category]: admin.firestore.FieldValue.increment(exp.totalAmount)} 
-    }, { merge: true }); 
+    }, { merge: true });
+    
+    // Send approval request email
+    if (exp.approvalStatus === 'pending') {
+    await sendExpenseApprovalRequest(exp);
+    }
 });

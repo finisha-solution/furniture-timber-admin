@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { db } from '../../services/firebase-client';
 import { collection, getDocs, updateDoc, deleteDoc, doc, addDoc } from 'firebase/firestore';
 
@@ -9,15 +9,20 @@ export default function Users() {
   const [editingUser, setEditingUser] = useState<any>(null);
   const [form, setForm] = useState({ name: '', email: '', role: 'salesperson', phone: '' });
 
-  useEffect(() => {
-    fetchUsers();
+  const fetchUsers = useCallback(async () => {
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const fetchUsers = async () => {
-    const snap = await getDocs(collection(db, 'users'));
-    setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    setLoading(false);
-  };
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,14 +37,20 @@ export default function Users() {
       setForm({ name: '', email: '', role: 'salesperson', phone: '' });
       fetchUsers();
     } catch (error) {
-      alert('Error saving user');
+      console.error('Error saving user:', error);
+      alert('Error saving user. Please try again.');
     }
   };
 
   const handleDelete = async (id: string) => {
     if (confirm('Delete this user?')) {
-      await deleteDoc(doc(db, 'users', id));
-      fetchUsers();
+      try {
+        await deleteDoc(doc(db, 'users', id));
+        fetchUsers();
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Error deleting user.');
+      }
     }
   };
 
@@ -49,14 +60,26 @@ export default function Users() {
     setShowModal(true);
   };
 
-  if (loading) return <div className="flex justify-center py-12"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
+  const handleAdd = () => {
+    setEditingUser(null);
+    setForm({ name: '', email: '', role: 'salesperson', phone: '' });
+    setShowModal(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Users</h1>
         <button
-          onClick={() => { setEditingUser(null); setForm({ name: '', email: '', role: 'salesperson', phone: '' }); setShowModal(true); }}
+          onClick={handleAdd}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
         >
           + Add User
@@ -76,22 +99,36 @@ export default function Users() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {users.map(u => (
-                <tr key={u.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{u.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{u.phone || '-'}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${u.role === 'admin' ? 'bg-purple-100 text-purple-800' : u.role === 'store_manager' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 flex gap-2">
-                    <button onClick={() => handleEdit(u)} className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
-                    <button onClick={() => handleDelete(u.id)} className="text-red-600 hover:text-red-800 text-sm">Delete</button>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                    No users found. Click "+ Add User" to create one.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                users.map(u => (
+                  <tr key={u.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{u.name}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{u.phone || '-'}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        u.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
+                        u.role === 'store_manager' ? 'bg-blue-100 text-blue-800' : 
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {u.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        <button onClick={() => handleEdit(u)} className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+                        <button onClick={() => handleDelete(u.id)} className="text-red-600 hover:text-red-800 text-sm">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { auth } from '../services/firebase-client';
 import { onAuthStateChanged } from 'firebase/auth';
-import Layout from '../components/Layout';
+import Layout from '../components/layout';
 
 export default function App({ Component, pageProps }: any) {
   const router = useRouter();
