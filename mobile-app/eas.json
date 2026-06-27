@@ -1,34 +1,19 @@
 {
   "cli": {
-    "version": ">= 20.3.0",
+    "version": ">= 3.0.0",
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "node": "20.19.0",
-       "env": {
-        "EXPO_PUBLIC_ENABLE_OFFLINE_MODE": "true"
-      },
-       "prebuild": "clean"
-    },
     "preview": {
       "distribution": "internal",
-      "node": "20.19.0",
-       "android": {
-          "buildType": "apk"
-       },
-       "env": {
-        "EXPO_PUBLIC_ENABLE_OFFLINE_MODE": "true"
+      "android": {
+        "buildType": "apk"
       },
-      "prebuild": "clean"
+      "env": {
+        "EXPO_PUBLIC_ENABLE_OFFLINE_MODE": "true"
+      }
     },
-    "production": {
-      "autoIncrement": true,
-      "node": "20.19.0",
-      "prebuild": "clean"
-    }
+    "production": {}
   },
   "submit": {
     "production": {}
