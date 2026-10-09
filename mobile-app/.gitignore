@@ -1,7 +1,7 @@
 node_modules/
 .expo/
 .eas/
-android/
+# android/
 ios/
 .idea/
 *.iml
