@@ -5,7 +5,7 @@ import { LoginScreen } from '../screens/auth/LoginScreen';
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen'; 
 import { SalesScreen } from '../screens/sales/SalesScreen'; 
 import { CartScreen } from '../screens/sales/CartScreen'; 
-import { ScannerScreen } from '../screens/sales/ScannerScreen'; 
+//import { ScannerScreen } from '../screens/sales/ScannerScreen'; 
 import { ReceiptScreen } from '../screens/sales/ReceiptScreen'; 
 import { StockListScreen } from '../screens/inventory/StockListScreen'; 
 import { StockTakeScreen } from '../screens/inventory/StockTakeScreen'; 
@@ -21,7 +21,7 @@ import { PrivateRoute } from '../components/auth/PrivateRoute';
 import { CustomerListScreen } from '../screens/sales/CustomerListScreen';
 import { ProfitLossScreen } from '../screens/reports/ProfitLossScreen';
 import { UserManagementScreen } from '../screens/admin/UserManagementScreen';
-import { BarcodeScanner } from '../components/scanner/BarcodeScanner';
+//import { BarcodeScanner } from '../components/scanner/BarcodeScanner';
 import { Settings } from 'react-native';
 
 export const AppRoutes = () => { 
@@ -36,9 +36,9 @@ export const AppRoutes = () => {
                     <Route index element={<SalesScreen />} />
                     <Route path="cart" element={<CartScreen />} />
                     <Route path="receipt/:saleId" element={<ReceiptScreen />} />
-                    <Route path="scanner" element={<ScannerScreen />} />
+                   
                     <Route path="customer" element={<CustomerListScreen />} />
-                    <Route path="scanner" element={<BarcodeScanner onScan={(b) => console.log(b)} onClose={() => navigate(-1)} />} />
+                    
                 </Route>
                 <Route path="inventory">
                     <Route index element={<StockListScreen />} />

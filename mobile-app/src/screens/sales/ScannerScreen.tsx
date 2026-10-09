@@ -1,35 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, Card } from 'react-native-paper';
 import { useNavigate } from 'react-router-native';
 
 export const ScannerScreen = () => {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  const handleBarCodeScanned = ({ data }: { data: string }) => {
-    setScanned(true);
-    // Pass the scanned value back to the sales screen
-    navigate('/sales', { state: { scannedProduct: data } });
-  };
-
-  if (hasPermission === null) return <Text>Requesting camera permission...</Text>;
-  if (!hasPermission) return <Text>No camera access. Enable in settings.</Text>;
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={StyleSheet.absoluteFillObject} />
-      {scanned && <Button title="Scan Again" onPress={() => setScanned(false)} />}
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text style={styles.icon}>📷</Text>
+          <Text style={styles.title}>Scanner Disabled</Text>
+          <Text style={styles.message}>
+            Barcode scanner is currently disabled to avoid dependency conflicts.
+          </Text>
+          <Button mode="contained" onPress={() => navigate(-1)} style={styles.button}>
+            Go Back
+          </Button>
+        </Card.Content>
+      </Card>
     </View>
   );
 };
 
-const styles = StyleSheet.create({ container: { flex: 1, flexDirection: 'column', justifyContent: 'center' } });
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16, backgroundColor: '#f5f5f5' },
+  card: { width: '100%', maxWidth: 400, padding: 16 },
+  icon: { fontSize: 48, textAlign: 'center', marginBottom: 16 },
+  title: { fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 8 },
+  message: { textAlign: 'center', color: '#666', marginBottom: 16 },
+  button: { marginTop: 8 },
+});
