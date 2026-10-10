@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Outlet, useNavigate, useLocation } from 'react-router-native';
 import { Text } from 'react-native-paper';
-import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
+import MaterialDesignIcons from 'react-native-vector-icons/MaterialIcons';
 
 export const Layout = () => {
     const navigate = useNavigate();
