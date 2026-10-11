@@ -1,6 +1,15 @@
-const { getDefaultConfig } = require('expo/metro-config'); 
-const config = getDefaultConfig(__dirname); 
-config.resolver.extraNodeModules = { ...config.resolver.extraNodeModules, 
-    'react-router-native': require.resolve('react-router-native') 
-}; 
+const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
+
+const projectRoot = __dirname;
+const monorepoRoot = path.resolve(projectRoot, '../..');
+
+const config = getDefaultConfig(projectRoot);
+
+config.watchFolders = [monorepoRoot];
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(monorepoRoot, 'node_modules'),
+];
+
 module.exports = config;
