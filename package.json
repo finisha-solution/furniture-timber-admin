@@ -7,21 +7,10 @@
     "admin-dashboard",
     "cloud-functions/functions"
   ],
-  "scripts": {
-    "dev:mobile": "cd mobile-app && npm start",
-    "dev:admin": "cd admin-dashboard && npm run dev",
-    "dev:functions": "cd cloud-functions/functions && npm run serve",
-    "build:mobile": "cd mobile-app && npm run build",
-    "build:admin": "cd admin-dashboard && npm run build",
-    "build:functions": "cd cloud-functions/functions && npm run build",
-    "deploy": "bash scripts/deploy.sh"
+  "overrides": {
+    "react-native": "0.72.10"
   },
   "devDependencies": {
     "turbo": "^1.10.0"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "^0.72.5"
   }
 }

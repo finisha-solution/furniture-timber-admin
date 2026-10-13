@@ -12,4 +12,9 @@ config.resolver.nodeModulesPaths = [
   path.resolve(monorepoRoot, 'node_modules'),
 ];
 
+// Force Metro to always resolve react-native from the app's own node_modules
+config.resolver.extraNodeModules = {
+  'react-native': path.resolve(projectRoot, 'node_modules', 'react-native'),
+};
+
 module.exports = config;
